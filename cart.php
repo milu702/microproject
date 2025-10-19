@@ -215,205 +215,1088 @@ function totalPrice($cart) {
     <title>Cart - Sparkle Nails</title>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
-            background: linear-gradient(135deg, #fff0f5, #ffe6f0);
+            background: linear-gradient(135deg, #fff0f5, #ffe6f0, #f0e6ff);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite, fadeInBody 1s ease-in;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
         }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 111, 165, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 77, 140, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 80%, rgba(255, 182, 193, 0.1) 0%, transparent 50%);
+            animation: floatingBubbles 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
         header {
-            background: #ff6fa5;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            background-size: 200% 200%;
+            animation: headerGradient 8s ease infinite, fadeInHeader 0.8s ease-in;
             color: white;
-            padding: 20px 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 111, 165, 0.1), rgba(255, 77, 140, 0.05));
+            pointer-events: none;
+        }
+        
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 111, 165, 0.5), transparent);
+        }
+
         .nav-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 20px 30px;
+            position: relative;
+            z-index: 2;
+            min-height: 80px;
         }
+
         .logo-container {
             display: flex;
             align-items: center;
+            gap: 20px;
+            flex-shrink: 0;
+        }
+        
+        .logo-container a {
+            display: flex;
+            align-items: center;
             gap: 15px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
         }
+        
+        .logo-container a:hover {
+            transform: translateY(-2px);
+        }
+
         .logo {
-            height: 50px;
+            height: 60px;
             width: auto;
-            border-radius: 10px;
-            transition: transform 0.3s;
+            border-radius: 12px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+            animation: logoFloat 6s ease-in-out infinite;
+            border: 2px solid rgba(255, 255, 255, 0.1);
         }
+
         .logo:hover {
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(3deg);
+            filter: drop-shadow(0 8px 20px rgba(255, 111, 165, 0.4));
+            border-color: rgba(255, 111, 165, 0.3);
         }
+        
+        .logo-text {
+            font-size: 1.8em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6fa5, #ff4d8c, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+
         .nav-bar h1 {
             font-size: 1.8em;
             margin: 0;
             display: none;
         }
+
         nav {
             display: flex;
-            gap: 10px;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
         }
+
         nav a {
-            color: white;
+            color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
-            padding: 10px 15px;
-            font-weight: bold;
-            font-size: 1.1em;
-            border-radius: 20px;
-            transition: background 0.3s, color 0.3s;
+            padding: 12px 20px;
+            font-weight: 500;
+            font-size: 1em;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            white-space: nowrap;
         }
+        
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 111, 165, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
         nav a:hover {
-            background: #ff4d8c;
-            color: #ffe6f0;
+            background: linear-gradient(135deg, rgba(255, 111, 165, 0.2), rgba(255, 77, 140, 0.1));
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 111, 165, 0.3);
+            border-color: rgba(255, 111, 165, 0.3);
         }
+        
+        nav a:hover::before {
+            left: 100%;
+        }
+        
+        nav a.active {
+            background: linear-gradient(135deg, #ff6fa5, #ff4d8c);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(255, 111, 165, 0.4);
+        }
+
         .user-btn {
-            background: #d4286d;
+            background: linear-gradient(135deg, #ff6fa5, #ff4d8c);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 1.1em;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1em;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(255, 111, 165, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
+        
+        .user-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
         .user-btn:hover {
-            background: #b81e5e;
+            background: linear-gradient(135deg, #ff4d8c, #d4286d);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 111, 165, 0.5);
         }
+        
+        .user-btn:hover::before {
+            left: 100%;
+        }
+
         .dropdown {
             position: relative;
             display: inline-block;
         }
+        /* Fix for dropdown visibility */
+header {
+    overflow: visible !important; /* Changed from hidden */
+    z-index: 1000;
+}
+
+.nav-bar {
+    z-index: 1001;
+}
+
+.dropdown {
+    position: relative;
+    z-index: 1002;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.98), rgba(22, 33, 62, 0.98));
+    backdrop-filter: blur(20px);
+    min-width: 200px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    z-index: 1003; /* Highest z-index */
+    border-radius: 12px;
+    margin-top: 8px;
+    padding: 8px 0;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dropdown:hover .dropdown-content {
+    opacity: 1;
+    display: block;
+    transform: translateY(0) scale(1);
+}
+
         .dropdown:hover .dropdown-content {
             display: block;
         }
+
         .dropdown-content {
             display: none;
             position: absolute;
             right: 0;
-            background-color: #ff6fa5;
-            min-width: 160px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            z-index: 1;
-            border-radius: 10px;
-            margin-top: 5px;
-            padding: 5px 0;
-            transition: opacity 0.3s ease-in-out;
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.95), rgba(22, 33, 62, 0.95));
+            backdrop-filter: blur(20px);
+            min-width: 200px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            border-radius: 12px;
+            margin-top: 8px;
+            padding: 8px 0;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             opacity: 0;
+            transform: translateY(-10px) scale(0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
         .dropdown:hover .dropdown-content {
             opacity: 1;
             display: block;
+            transform: translateY(0) scale(1);
         }
+
         .dropdown-content a {
-            color: white;
-            padding: 10px 15px;
+            color: rgba(255, 255, 255, 0.9);
+            padding: 12px 20px;
             text-decoration: none;
             display: block;
-            border-radius: 10px;
+            border-radius: 8px;
+            margin: 2px 8px;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
         }
+        
+        .dropdown-content a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 111, 165, 0.2), transparent);
+            transition: left 0.3s;
+        }
+
         .dropdown-content a:hover {
-            background-color: #ff4d8c;
+            background: linear-gradient(135deg, rgba(255, 111, 165, 0.2), rgba(255, 77, 140, 0.1));
+            color: #fff;
+            transform: translateX(5px);
         }
+        
+        .dropdown-content a:hover::before {
+            left: 100%;
+        }
+
+        /* Enhanced Keyframe Animations */
+        @keyframes fadeInBody {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        @keyframes fadeInHeader {
+            from {opacity: 0; transform: translateY(-20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes floatingBubbles {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(90deg); }
+            50% { transform: translateY(-10px) rotate(180deg); }
+            75% { transform: translateY(-30px) rotate(270deg); }
+        }
+
+        @keyframes headerGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-bar {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+                min-height: auto;
+            }
+            
+            .logo-container {
+                justify-content: center;
+            }
+            
+            .logo-text {
+                font-size: 1.5em;
+            }
+            
+            nav {
+                justify-content: center;
+                gap: 6px;
+            }
+            
+            nav a {
+                padding: 10px 16px;
+                font-size: 0.9em;
+            }
+            
+            .user-btn {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+            
+            .dropdown-content {
+                right: auto;
+                left: 50%;
+                transform: translateX(-50%) translateY(-10px) scale(0.95);
+            }
+            
+            .dropdown:hover .dropdown-content {
+                transform: translateX(-50%) translateY(0) scale(1);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .nav-bar {
+                padding: 12px 15px;
+            }
+            
+            .logo {
+                height: 50px;
+            }
+            
+            .logo-text {
+                font-size: 1.3em;
+            }
+            
+            nav {
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+            
+            nav a {
+                padding: 8px 12px;
+                font-size: 0.85em;
+            }
+        }
+        
+        /* New vertical layout styles */
         .main-content {
             flex: 1;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            flex-direction: column;
             gap: 20px;
             padding: 20px;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-        }
-        .cart-items, .add-section {
+            animation: slideInUp 1s ease-out;
             width: 100%;
         }
-        .cart-item, .product {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            padding: 20px;
+        
+        .cart-section {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 248, 252, 0.95));
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(255, 111, 165, 0.15);
+            border: 1px solid rgba(255, 111, 165, 0.2);
+            animation: cartSectionSlideIn 1s ease-out;
+        }
+        
+        .cart-items {
+            width: 100%;
             margin-bottom: 20px;
+        }
+        
+        .vertical-heading {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 111, 165, 0.2);
+        }
+        
+        .vertical-heading h2 {
+            font-size: 2.2em;
+            color: #1a1a2e;
+            margin: 0;
+            font-weight: 800;
+            writing-mode: vertical-lr;
+            transform: rotate(180deg);
+            padding: 15px 10px;
+            background: linear-gradient(135deg, #ff6fa5, #ff4d8c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            border-right: 3px solid #ff6fa5;
+            margin-right: 20px;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+        
+        .cart-content {
+            flex-grow: 1;
+        }
+        
+        .cart-item {
+            background: linear-gradient(135deg, #fff, #fff8fc);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(255, 111, 165, 0.12);
+            padding: 15px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 1px solid rgba(255, 111, 165, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: cartItemSlideIn 0.8s ease-out;
         }
-        .cart-item img, .product img {
-            width: 100px;
-            height: 100px;
+        
+        .cart-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 111, 165, 0.1), transparent);
+            transition: left 0.6s;
+        }
+        
+        .cart-item:hover {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 12px 25px rgba(255, 111, 165, 0.2);
+            border-color: rgba(255, 111, 165, 0.3);
+        }
+        
+        .cart-item:hover::before {
+            left: 100%;
+        }
+        
+        .cart-item img {
+            width: 80px;
+            height: 80px;
             object-fit: cover;
             border-radius: 10px;
-            margin-right: 20px;
+            margin-right: 15px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            filter: brightness(1.05) contrast(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        .cart-item-details, .product-details {
+        
+        .cart-item:hover img {
+            transform: scale(1.1) rotate(3deg);
+            filter: brightness(1.1) contrast(1.2) saturate(1.2);
+        }
+        
+        .cart-item-details {
             flex-grow: 1;
+            position: relative;
+            z-index: 1;
         }
+        
+        .cart-item-details strong {
+            font-size: 1.1em;
+            color: #1a1a2e;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .cart-item-details .price {
+            font-size: 1em;
+            color: #ff4d8c;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
         .quantity-controls {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            margin-top: 8px;
         }
+        
         .quantity-controls button {
-            background: #ff6fa5;
+            background: linear-gradient(135deg, #ff6fa5, #ff4d8c);
             color: white;
             border: none;
-            padding: 5px 10px;
-            border-radius: 20px;
+            padding: 6px 10px;
+            border-radius: 50%;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            font-weight: 700;
+            font-size: 0.9em;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(255, 111, 165, 0.3);
         }
+        
         .quantity-controls button:hover {
-            background: #ff4d8c;
+            background: linear-gradient(135deg, #ff4d8c, #d4286d);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 111, 165, 0.5);
         }
-        .cart-item button, .product button {
-            background: #ff6fa5;
+        
+        .quantity-controls input {
+            width: 50px;
+            text-align: center;
+            padding: 6px;
+            border: 1px solid #ff6fa5;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9em;
+            background: linear-gradient(135deg, #fff, #fff8fc);
+            transition: all 0.3s ease;
+        }
+        
+        .quantity-controls input:focus {
+            outline: none;
+            border-color: #ff4d8c;
+            box-shadow: 0 0 15px rgba(255, 77, 140, 0.3);
+        }
+        
+        .cart-item button {
+            background: linear-gradient(135deg, #ff6fa5, #ff4d8c);
             color: white;
             border: none;
             padding: 8px 15px;
             border-radius: 20px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            font-weight: 600;
+            font-size: 0.85em;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(255, 111, 165, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .cart-item button:hover, .product button:hover {
-            background: #ff4d8c;
+        
+        .cart-item button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
         }
+        
+        .cart-item button:hover {
+            background: linear-gradient(135deg, #ff4d8c, #d4286d);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 111, 165, 0.5);
+        }
+        
+        .cart-item button:hover::before {
+            left: 100%;
+        }
+        
         .payment-section {
-            background: white;
+            background: linear-gradient(135deg, #fff, #fff8fc);
             border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 20px rgba(255, 111, 165, 0.12);
             padding: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 111, 165, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: paymentSlideIn 1s ease-out;
         }
+        
+        .payment-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 111, 165, 0.05), transparent);
+            animation: paymentShimmer 4s linear infinite;
+            pointer-events: none;
+        }
+        
+        .payment-section h3 {
+            font-size: 1.3em;
+            color: #1a1a2e;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .total-price {
+            font-size: 1.5em;
+            color: #ff4d8c;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            animation: pricePulse 2s ease-in-out infinite;
+        }
+        
+        .pay-button {
+            background: linear-gradient(135deg, #ff6fa5, #ff4d8c, #d4286d);
+            background-size: 200% 200%;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(255, 111, 165, 0.4);
+            width: 100%;
+            animation: payButtonFloat 3s ease-in-out infinite, payButtonGradient 4s ease infinite;
+        }
+        
+        .pay-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+        }
+        
+        .pay-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 111, 165, 0.6);
+            animation-play-state: paused;
+        }
+        
+        .pay-button:hover::before {
+            left: 100%;
+        }
+        
+        .pay-button:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+        
+        .add-section {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(255, 248, 252, 0.95), rgba(255, 240, 245, 0.95));
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(255, 111, 165, 0.15);
+            border: 1px solid rgba(255, 111, 165, 0.2);
+            animation: sidebarSlideIn 1s ease-out;
+        }
+        
+        .add-section h2 {
+            font-size: 1.8em;
+            color: #ff4d8c;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(255, 77, 140, 0.2);
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 15px;
+        }
+        
+        .product {
+            background: linear-gradient(135deg, #fff, #fff8fc);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(255, 111, 165, 0.12);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 1px solid rgba(255, 111, 165, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: productSlideIn 0.8s ease-out;
+            text-align: center;
+        }
+        
+        .product::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 111, 165, 0.1), transparent);
+            transition: left 0.6s;
+        }
+        
+        .product:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 25px rgba(255, 111, 165, 0.2);
+            border-color: rgba(255, 111, 165, 0.3);
+        }
+        
+        .product:hover::before {
+            left: 100%;
+        }
+        
+        .product img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            filter: brightness(1.05) contrast(1.1);
+        }
+        
+        .product:hover img {
+            transform: scale(1.1) rotate(2deg);
+            filter: brightness(1.1) contrast(1.2) saturate(1.2);
+        }
+        
+        .product-details {
+            flex-grow: 1;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+        
+        .product-details strong {
+            font-size: 1.1em;
+            color: #1a1a2e;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .product-details .price {
+            font-size: 1.1em;
+            color: #ff4d8c;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .product button {
+            background: linear-gradient(135deg, #ff6fa5, #ff4d8c);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            font-weight: 600;
+            font-size: 0.9em;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(255, 111, 165, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: 100%;
+        }
+        
+        .product button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .product button:hover {
+            background: linear-gradient(135deg, #ff4d8c, #d4286d);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 111, 165, 0.5);
+        }
+        
+        .product button:hover::before {
+            left: 100%;
+        }
+        
         .success, .error {
             text-align: center;
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            font-size: 1.1em;
+            animation: messageSlideIn 0.8s ease-out;
         }
+        
         .success {
-            background: #d4edda;
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
             color: #155724;
+            border: 2px solid #c3e6cb;
+            box-shadow: 0 8px 25px rgba(21, 87, 36, 0.2);
         }
+        
         .error {
-            background: #f8d7da;
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
             color: #721c24;
+            border: 2px solid #f5c6cb;
+            box-shadow: 0 8px 25px rgba(114, 28, 36, 0.2);
         }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+            font-size: 1.3em;
+            font-weight: 500;
+            animation: emptyCartPulse 2s ease-in-out infinite;
+        }
+        
         footer {
-            background: #ff6fa5;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
             color: white;
             text-align: center;
-            padding: 10px;
+            padding: 20px;
+            margin-top: auto;
+        }
+        
+        footer a {
+            color: #ff6fa5;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        
+        footer a:hover {
+            color: #ff4d8c;
+        }
+        
+        /* Enhanced Animations */
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes cartItemSlideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes productSlideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes paymentSlideIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        @keyframes sidebarSlideIn {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes cartSectionSlideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes messageSlideIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes titleGlow {
+            0%, 100% { text-shadow: 0 0 5px rgba(255, 111, 165, 0.3); }
+            50% { text-shadow: 0 0 20px rgba(255, 111, 165, 0.6), 0 0 30px rgba(255, 111, 165, 0.4); }
+        }
+        
+        @keyframes pricePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes payButtonFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-3px); }
+        }
+        
+        @keyframes payButtonGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes paymentShimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        @keyframes emptyCartPulse {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+        }
+        
+        /* Staggered animations for cart items */
+        .cart-item:nth-child(1) { animation-delay: 0.1s; }
+        .cart-item:nth-child(2) { animation-delay: 0.2s; }
+        .cart-item:nth-child(3) { animation-delay: 0.3s; }
+        .cart-item:nth-child(4) { animation-delay: 0.4s; }
+        .cart-item:nth-child(5) { animation-delay: 0.5s; }
+        
+        .product:nth-child(1) { animation-delay: 0.1s; }
+        .product:nth-child(2) { animation-delay: 0.2s; }
+        .product:nth-child(3) { animation-delay: 0.3s; }
+        .product:nth-child(4) { animation-delay: 0.4s; }
+        .product:nth-child(5) { animation-delay: 0.5s; }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 15px;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .cart-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .cart-item img {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            
+            .vertical-heading {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .vertical-heading h2 {
+                writing-mode: horizontal-tb;
+                transform: none;
+                border-right: none;
+                border-bottom: 3px solid #ff6fa5;
+                margin-right: 0;
+                margin-bottom: 15px;
+                padding: 10px 0;
+            }
+            
+            .add-section {
+                padding: 20px;
+            }
+            
+            .cart-section {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .product {
+                padding: 15px;
+            }
+            
+            .product img {
+                width: 100px;
+                height: 100px;
+            }
         }
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Enhanced dropdown functionality
             const dropdowns = document.querySelectorAll('.dropdown');
             dropdowns.forEach(dropdown => {
                 const button = dropdown.querySelector('.user-btn');
@@ -422,26 +1305,30 @@ function totalPrice($cart) {
                 button.addEventListener('mouseover', () => {
                     content.style.display = 'block';
                     content.style.opacity = '1';
+                    content.style.transform = 'translateY(0) scale(1)';
                 });
 
                 dropdown.addEventListener('mouseleave', () => {
                     setTimeout(() => {
                         if (!dropdown.matches(':hover')) {
                             content.style.opacity = '0';
+                            content.style.transform = 'translateY(-10px) scale(0.95)';
                             setTimeout(() => {
                                 content.style.display = 'none';
-                            }, 300); // Match the CSS transition duration
+                            }, 300);
                         }
-                    }, 200); // Delay to allow mouse movement to content
+                    }, 200);
                 });
 
                 content.addEventListener('mouseover', () => {
                     content.style.display = 'block';
                     content.style.opacity = '1';
+                    content.style.transform = 'translateY(0) scale(1)';
                 });
 
                 content.addEventListener('mouseleave', () => {
                     content.style.opacity = '0';
+                    content.style.transform = 'translateY(-10px) scale(0.95)';
                     setTimeout(() => {
                         content.style.display = 'none';
                     }, 300);
@@ -508,91 +1395,107 @@ function totalPrice($cart) {
                 <span class="logo-text">Sparkle Nails</span>
             </div>
             <nav>
-                <a href="index.php">Home</a>
-                <a href="shop.php">Shop</a>
-                <a href="cart.php">Cart</a>
+                <a href="index.php" <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'class="active"' : '' ?>>Home</a>
+                <a href="shop.php" <?= basename($_SERVER['PHP_SELF']) == 'shop.php' ? 'class="active"' : '' ?>>Shop</a>
+                <a href="cart.php" <?= basename($_SERVER['PHP_SELF']) == 'cart.php' ? 'class="active"' : '' ?>>Cart</a>
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <div class="dropdown">
-                        <button class="user-btn"><?= strtoupper(htmlspecialchars($_SESSION['username'])) ?></button>
+                        <button class="user-btn">
+                            <span><?= strtoupper(htmlspecialchars($_SESSION['username'])) ?></span>
+                        </button>
                         <div class="dropdown-content">
-                            <a href="order_history.php">Order History</a>
-                            <a href="?logout=1">Logout</a>
+                            <a href="order_history.php">📋 Order History</a>
+                            <a href="?logout=1">🚪 Logout</a>
                         </div>
                     </div>
                 <?php else: ?>
                     <a href="login.php">Login</a>
+                    <a href="register.php">Register</a>
                 <?php endif; ?>
             </nav>
         </div>
     </header>
 
     <div class="main-content">
-        <div class="cart-items">
-            <h2>Your Cart</h2>
-            <?php
-            $cart = $_SESSION['cart'] ?? [];
-            if (!is_array($cart)) {
-                error_log("Cart is not an array: " . var_export($cart, true));
-                $cart = [];
-            }
-            if (empty($cart)): ?>
-                <p>Your cart is empty.</p>
-            <?php else: ?>
-                <?php foreach ($cart as $item): ?>
-                    <div class="cart-item">
-                        <img src="<?= htmlspecialchars($item['image'] ?? 'default.png') ?>" alt="<?= htmlspecialchars($item['name'] ?? 'Unknown') ?>">
-                        <div class="cart-item-details">
-                            <strong><?= htmlspecialchars($item['name'] ?? 'Unknown') ?></strong><br>
-                            ₹<?= htmlspecialchars($item['price'] ?? 0) ?> x 
-                            <form method="POST" action="cart.php" style="display:inline;">
-                                <input type="hidden" name="id" value="<?= htmlspecialchars($item['id'] ?? 0) ?>">
-                                <div class="quantity-controls">
-                                    <button type="submit" name="adjust_quantity" value="decrement" onclick="this.form.querySelector('input[name=quantity]').value = <?= max(0, ($item['quantity'] ?? 1) - 1) ?>">-</button>
-                                    <input type="number" name="quantity" value="<?= htmlspecialchars($item['quantity'] ?? 1) ?>" min="0" style="width: 50px; text-align: center;" onchange="this.form.submit()">
-                                    <button type="submit" name="adjust_quantity" value="increment" onclick="this.form.querySelector('input[name=quantity]').value = <?= ($item['quantity'] ?? 1) + 1 ?>">+</button>
-                                </div>
-                            </form>
+        <div class="cart-section">
+            <div class="vertical-heading">
+                <h2>🛒 Your Cart</h2>
+                <div class="cart-content">
+                    <?php
+                    $cart = $_SESSION['cart'] ?? [];
+                    if (!is_array($cart)) {
+                        error_log("Cart is not an array: " . var_export($cart, true));
+                        $cart = [];
+                    }
+                    if (empty($cart)): ?>
+                        <div class="empty-cart">
+                            <h3>🛒 Your cart is empty</h3>
+                            <p>Add some beautiful nail products to get started!</p>
                         </div>
-                        <form method="POST" action="cart.php">
-                            <input type="hidden" name="id" value="<?= htmlspecialchars($item['id'] ?? 0) ?>">
-                            <input type="hidden" name="remove_from_cart" value="1">
-                            <button type="submit">Remove</button>
-                        </form>
-                    </div>
-                <?php endforeach; ?>
+                    <?php else: ?>
+                        <?php foreach ($cart as $item): ?>
+                            <div class="cart-item">
+                                <img src="<?= htmlspecialchars($item['image'] ?? 'default.png') ?>" alt="<?= htmlspecialchars($item['name'] ?? 'Unknown') ?>">
+                                <div class="cart-item-details">
+                                    <strong><?= htmlspecialchars($item['name'] ?? 'Unknown') ?></strong>
+                                    <div class="price">₹<?= htmlspecialchars($item['price'] ?? 0) ?></div>
+                                    <form method="POST" action="cart.php" style="display:inline;">
+                                        <input type="hidden" name="id" value="<?= htmlspecialchars($item['id'] ?? 0) ?>">
+                                        <div class="quantity-controls">
+                                            <button type="submit" name="adjust_quantity" value="decrement" onclick="this.form.querySelector('input[name=quantity]').value = <?= max(0, ($item['quantity'] ?? 1) - 1) ?>">-</button>
+                                            <input type="number" name="quantity" value="<?= htmlspecialchars($item['quantity'] ?? 1) ?>" min="0" onchange="this.form.submit()">
+                                            <button type="submit" name="adjust_quantity" value="increment" onclick="this.form.querySelector('input[name=quantity]').value = <?= ($item['quantity'] ?? 1) + 1 ?>">+</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <form method="POST" action="cart.php">
+                                    <input type="hidden" name="id" value="<?= htmlspecialchars($item['id'] ?? 0) ?>">
+                                    <input type="hidden" name="remove_from_cart" value="1">
+                                    <button type="submit">🗑️ Remove</button>
+                                </form>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+
+                    <?php if (isset($payment_success)): ?>
+                        <div class="success">Payment Successful! Thank you for shopping 💖<br>Payment ID: <?= htmlspecialchars($payment_id) ?></div>
+                    <?php endif; ?>
+
+                    <?php if (isset($payment_error)): ?>
+                        <div class="error"><?= htmlspecialchars($payment_error) ?></div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <?php if (!empty($cart)): ?>
                 <div class="payment-section">
-                    <p>Total: ₹<?= totalPrice($cart) ?></p>
+                    <h3>💳 Order Summary</h3>
+                    <div class="total-price">Total: ₹<?= totalPrice($cart) ?></div>
                     <form method="POST">
-                        <button type="submit" name="initiate_payment" id="payButton">💳 Pay Now with Razorpay</button>
+                        <button type="submit" name="initiate_payment" id="payButton" class="pay-button">💳 Pay Now with Razorpay</button>
                     </form>
                 </div>
-            <?php endif; ?>
-
-            <?php if (isset($payment_success)): ?>
-                <p class="success">Payment Successful! Thank you for shopping 💖<br>Payment ID: <?= htmlspecialchars($payment_id) ?></p>
-            <?php endif; ?>
-
-            <?php if (isset($payment_error)): ?>
-                <p class="error"><?= htmlspecialchars($payment_error) ?></p>
             <?php endif; ?>
         </div>
 
-        <section class="add-section">
+        <div class="add-section">
             <h2>➕ Add More Products</h2>
-            <?php foreach ($products as $p): ?>
-                <div class="product">
-                    <img src="<?= htmlspecialchars($p['image'] ?? 'default.png') ?>" alt="<?= htmlspecialchars($p['name'] ?? 'Unknown') ?>">
-                    <div class="product-details">
-                        <strong><?= htmlspecialchars($p['name'] ?? 'Unknown') ?></strong><br>
-                        ₹<?= htmlspecialchars($p['price'] ?? 0) ?>
+            <div class="products-grid">
+                <?php foreach ($products as $p): ?>
+                    <div class="product">
+                        <img src="<?= htmlspecialchars($p['image'] ?? 'default.png') ?>" alt="<?= htmlspecialchars($p['name'] ?? 'Unknown') ?>">
+                        <div class="product-details">
+                            <strong><?= htmlspecialchars($p['name'] ?? 'Unknown') ?></strong>
+                            <div class="price">₹<?= htmlspecialchars($p['price'] ?? 0) ?></div>
+                        </div>
+                        <form method="POST">
+                            <input type="hidden" name="id" value="<?= htmlspecialchars($p['id'] ?? 0) ?>">
+                            <button type="submit" name="add_to_cart">Add to Cart</button>
+                        </form>
                     </div>
-                    <form method="POST">
-                        <input type="hidden" name="id" value="<?= htmlspecialchars($p['id'] ?? 0) ?>">
-                        <button type="submit" name="add_to_cart">Add to Cart</button>
-                    </form>
-                </div>
-            <?php endforeach; ?>
-        </section>
+                <?php endforeach; ?>
+            </div>
+        </div>
     </div>
 
     <footer>
